@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Git Checkout ') {
             steps {
-                git 'https://github.com/Amul-Thantharate/Cicd-Dot-Ne.git'
+                git branch: 'main', url: 'https://github.com/Amul-Thantharate/Cicd-Dot-Ne.git'
             }
         }
         
