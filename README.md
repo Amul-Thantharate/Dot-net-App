@@ -18,27 +18,11 @@ The app has several basic pages accessed from the top navigation menu, some of w
 ![screen](https://user-images.githubusercontent.com/14982936/71717448-0bc47400-2e10-11ea-8bf0-5115d4c8c4a4.png)
 ![screen](https://user-images.githubusercontent.com/14982936/71717426-fea78500-2e0f-11ea-881f-ad9bd8adbfae.png)
 
-# Status
-
-![](https://img.shields.io/github/last-commit/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/release-date/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/v/release/benc-uk/dotnet-demoapp) ![](https://img.shields.io/github/commit-activity/y/benc-uk/dotnet-demoapp)
-
-Live instances:
-
-[![](https://img.shields.io/website?label=Hosted%3A%20Kubernetes&up_message=online&url=https%3A%2F%2Fdotnet-demoapp.kube.benco.io%2F)](https://dotnet-demoapp.kube.benco.io/)
-
-# Running and Testing Locally
-
-### Pre-reqs
-
-- Be using Linux, WSL or MacOS, with bash, make etc
-- [.NET 6](https://docs.microsoft.com/en-us/dotnet/core/install/linux) - for running locally, linting, running tests etc
-- [Docker](https://docs.docker.com/get-docker/) - for running as a container, or image build and push
-- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli-linux) - for deployment to Azure
 
 Clone the project to any directory where you do development work
 
 ```
-git clone https://github.com/benc-uk/dotnet-demoapp.git
+git clone https://github.com/Amul-Thantharate/Dot-net-App.git
 ```
 
 ### Makefile
@@ -52,12 +36,6 @@ help                 💬 This help message
 lint                 🔎 Lint & format, will not fix but sets exit code on error
 image                🔨 Build container image from Dockerfile
 push                 📤 Push container image to registry
-run                  🏃‍ Run locally using Dotnet CLI
-deploy               🚀 Deploy to Azure Container App
-undeploy             💀 Remove from Azure
-test                 🎯 Unit tests with xUnit
-test-report          🤡 Unit tests with xUnit & output report
-clean                🧹 Clean up project
 ```
 
 Make file variables and default values, pass these in when calling `make`, e.g. `make image IMAGE_REPO=blah/foo`
@@ -71,12 +49,6 @@ Make file variables and default values, pass these in when calling `make`, e.g. 
 | AZURE_REGION      | northeurope            |
 | AZURE_APP_NAME    | dotnet-demoapp         |
 
-Web app will listen on the usual Kestrel port of 5000, but this can be changed by setting the `ASPNETCORE_URLS` environmental variable or with the `--urls` parameter ([see docs](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/servers/kestrel?view=aspnetcore-6.0)).
-
-# Containers
-
-Public container image is [available on GitHub Container Registry](https://github.com/users/benc-uk/packages/container/package/dotnet-demoapp).
-
 Run in a container with:
 
 ```bash
@@ -85,48 +57,4 @@ docker run --rm -it -p 5000:5000 ghcr.io/benc-uk/dotnet-demoapp:latest
 
 Should you want to build your own container, use `make image` and the above variables to customise the name & tag.
 
-## Kubernetes
-
-The app can easily be deployed to Kubernetes using Helm, see [deploy/kubernetes/readme.md](deploy/kubernetes/readme.md) for details
-
-# GitHub Actions CI/CD
-
-A set of GitHub Actions workflows are included for CI / CD. Automated builds for PRs are run in GitHub hosted runners validating the code (linting and tests) and building dev images. When code is merged into master, then automated deployment to AKS is done using Helm.
-
-[![](https://img.shields.io/github/workflow/status/benc-uk/dotnet-demoapp/CI%20Build%20App)](https://github.com/benc-uk/dotnet-demoapp/actions?query=workflow%3A%22CI+Build+App%22) [![](https://img.shields.io/github/workflow/status/benc-uk/dotnet-demoapp/CD%20Release%20-%20AKS?label=release-kubernetes)](https://github.com/benc-uk/dotnet-demoapp/actions?query=workflow%3A%22CD+Release+-+AKS%22)
-
-# Optional Features
-
-The app will start up and run with zero configuration, however the only features that will be available will be the *Info*, *Tools* & *Monitoring* views. The following optional features can be enabled:
-
-### Application Insights
-
-Enable this by setting `ApplicationInsights__InstrumentationKey`
-
-The app has been instrumented with the Application Insights SDK, it will however need to be configured to point to your App Insights instance/workspace. All requests will be tracked, as well as dependant calls to other APIs, exceptions & errors will also be logged
-
-[This article](https://docs.microsoft.com/en-us/azure/azure-monitor/app/asp-net-core) has more information on monitoring .NET with App Insights
-
-If running locally, and using appsettings.Development.json, this can be configured as follows
-
-```json
-"ApplicationInsights": {
-  "InstrumentationKey": "<key value here>"
-}
-```
-
-### Weather Details
-
-Enable this by setting `Weather__ApiKey`
-
-This will require a API key from OpenWeather, you can [sign up for free and get one here](https://openweathermap.org/). The page uses a browser API for geolocation to fetch the user's location.
-However, the `geolocation.getCurrentPosition()` browser API will only work when the site is served via HTTPS or from localhost. As a fallback, weather for London, UK will be show if the current position can not be obtained
-
-If running locally, and using appsettings.Development.json, this can be configured as follows
-
-```json
-"Weather": {
-  "ApiKey": "<key value here>"
-}
-```
 
